@@ -25652,22 +25652,23 @@
 
 	var React = __webpack_require__(1);
 
-	// var About = React.createClass({
-	//   render: function(){
-	//     return (
-	//       <h3>About Component</h3>
-	//     )
-	//   }
-	// });
-
 	// En las funciones que no tienen algún state, se puede utilizar la siguiente sintaxis::
 
 	var About = function About(props) {
-	  return React.createElement(
-	    "h3",
-	    null,
-	    "About Component"
-	  );
+	    return React.createElement(
+	        "div",
+	        null,
+	        React.createElement(
+	            "h3",
+	            null,
+	            "About Component"
+	        ),
+	        React.createElement(
+	            "p",
+	            null,
+	            "Welcome to the About page!"
+	        )
+	    );
 	};
 
 	module.exports = About;
