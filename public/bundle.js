@@ -25507,7 +25507,7 @@
 				{ className: "row" },
 				React.createElement(
 					"div",
-					{ className: "medium-6 large-4 small-centered columns" },
+					{ className: "medium-6 large-4 small-centered columns", style: { marginTop: "5%" } },
 					props.children
 				)
 			)
@@ -25671,7 +25671,7 @@
 				if (isLoading) {
 					return React.createElement(
 						"h3",
-						null,
+						{ className: "text-center" },
 						"Fetching weather..."
 					);
 				} else if (temp && location) {
@@ -25683,8 +25683,8 @@
 				"div",
 				null,
 				React.createElement(
-					"h3",
-					null,
+					"h1",
+					{ className: "text-center" },
 					"Get Weather"
 				),
 				React.createElement(WeatherForm, { onSearch: this.handleSearch }),
@@ -25729,7 +25729,7 @@
 									React.createElement("input", { type: "text", name: "location", ref: "location", placeholder: "Enter any location" }),
 									React.createElement(
 											"button",
-											null,
+											{ className: "button expanded hollow" },
 											"Get Weather"
 									)
 							)
@@ -25752,9 +25752,9 @@
 	    "div",
 	    null,
 	    React.createElement(
-	      "p",
-	      null,
-	      "Its ",
+	      "h3",
+	      { className: "text-center" },
+	      "It is ",
 	      props.temp,
 	      " on ",
 	      props.location
@@ -27289,14 +27289,43 @@
 	        "div",
 	        null,
 	        React.createElement(
-	            "h3",
-	            null,
+	            "h1",
+	            { className: "text-center" },
 	            "About Component"
 	        ),
 	        React.createElement(
 	            "p",
 	            null,
-	            "Welcome to the About page!"
+	            "This is a weather application built on React. I have built this for the The Complete React Wep App Developer Course."
+	        ),
+	        React.createElement(
+	            "p",
+	            null,
+	            "Here are some of the tools I used:"
+	        ),
+	        React.createElement(
+	            "ul",
+	            null,
+	            React.createElement(
+	                "li",
+	                null,
+	                React.createElement(
+	                    "a",
+	                    { href: "https://facebook.github.io/react", target: "_blank" },
+	                    "React JS"
+	                ),
+	                " - This was the JavaScript framework used."
+	            ),
+	            React.createElement(
+	                "li",
+	                null,
+	                React.createElement(
+	                    "a",
+	                    { href: "http://openweathermap.org", target: "_blank" },
+	                    "Open Weather Map"
+	                ),
+	                " - I used Open Weather Map to search for weather data by city name."
+	            )
 	        )
 	    );
 	};
