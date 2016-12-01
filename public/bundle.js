@@ -25800,7 +25800,7 @@
 	      { className: "text-center" },
 	      "It is ",
 	      props.temp,
-	      " on ",
+	      "\xBA on ",
 	      props.location
 	    )
 	  );
