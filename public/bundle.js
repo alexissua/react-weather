@@ -110,8 +110,8 @@
 	var Main = __webpack_require__(229);
 	var Nav = __webpack_require__(230);
 	var Weather = __webpack_require__(231);
-	var About = __webpack_require__(260);
-	var Examples = __webpack_require__(261);
+	var About = __webpack_require__(261);
+	var Examples = __webpack_require__(262);
 
 	// var obj = {
 	//   name: "Andrew"
@@ -120,8 +120,11 @@
 	// var {name} = obj;
 
 	// Load Foundation
-	__webpack_require__(262);
+	__webpack_require__(263);
 	$(document).foundation();
+
+	// Load CSS File::
+	__webpack_require__(267);
 
 	ReactDOM.render(React.createElement(
 	    Router,
@@ -25507,7 +25510,7 @@
 				{ className: "row" },
 				React.createElement(
 					"div",
-					{ className: "medium-6 large-4 small-centered columns", style: { marginTop: "5%" } },
+					{ className: "medium-6 large-4 small-centered columns" },
 					props.children
 				)
 			)
@@ -25536,7 +25539,15 @@
 			e.preventDefault();
 
 			var location = this.refs.location.value;
-			alert(location);
+			var encodedLocation = encodeURIComponent(location);
+
+			if (location.length > 0) {
+				this.refs.location.value = "";
+
+				// Redirigimos al home (quien hace la búsqueda) pero está vez le pasamos por url la localidad
+				// que se está buscano en el search de la derecha::
+				window.location.hash = "#/?location=" + encodedLocation;
+			}
 		},
 		render: function render() {
 			return React.createElement(
@@ -25594,7 +25605,7 @@
 							React.createElement(
 								"li",
 								null,
-								React.createElement("input", { type: "search", placeholder: "Search weather", ref: "location" })
+								React.createElement("input", { type: "search", placeholder: "Search weather by city", ref: "location" })
 							),
 							React.createElement(
 								"li",
@@ -25620,6 +25631,7 @@
 	var WeatherForm = __webpack_require__(232);
 	var WeatherMessage = __webpack_require__(233);
 	var openWeatherMap = __webpack_require__(234);
+	var ErrorModal = __webpack_require__(260);
 
 	var Weather = React.createClass({
 		displayName: "Weather",
@@ -25641,7 +25653,10 @@
 			var that = this;
 
 			this.setState({
-				isLoading: true
+				isLoading: true,
+				errorMessage: undefined,
+				location: undefined,
+				temp: undefined
 			});
 
 			// We call the getTemp and we use then again to update the state with the fetched data or to show the error:
@@ -25653,18 +25668,39 @@
 					isLoading: false
 				});
 			}, function (error) {
-				alert(error);
-
 				that.setState({
-					isLoading: false
+					isLoading: false,
+					errorMessage: error.message
 				});
 			});
+		},
+		componentDidMount: function componentDidMount() {
+			// This method fires it when the component has mounted into the browser::
+
+			//This variable contains the value from the url parameter location;
+			var locationFromSearch = this.props.location.query.location;
+
+			if (locationFromSearch && locationFromSearch.length > 0) {
+				this.handleSearch(locationFromSearch);
+				window.location.hash = "#/";
+			}
+		},
+		componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+			//This variable contains the value from the url parameter location;
+
+			var locationFromSearch = newProps.location.query.location;
+
+			if (locationFromSearch && locationFromSearch.length > 0) {
+				this.handleSearch(locationFromSearch);
+				window.location.hash = "#/";
+			}
 		},
 		render: function render() {
 			var _state = this.state,
 			    isLoading = _state.isLoading,
 			    temp = _state.temp,
-			    location = _state.location;
+			    location = _state.location,
+			    errorMessage = _state.errorMessage;
 
 
 			function renderMessage() {
@@ -25679,16 +25715,24 @@
 				}
 			}
 
+			function renderError() {
+
+				if (typeof errorMessage === 'string') {
+					return React.createElement(ErrorModal, { message: errorMessage });
+				}
+			}
+
 			return React.createElement(
 				"div",
 				null,
 				React.createElement(
 					"h1",
-					{ className: "text-center" },
-					"Get Weather"
+					{ className: "text-center page-title" },
+					"Weather App"
 				),
 				React.createElement(WeatherForm, { onSearch: this.handleSearch }),
-				renderMessage()
+				renderMessage(),
+				renderError()
 			);
 		}
 	});
@@ -25726,7 +25770,7 @@
 							React.createElement(
 									"form",
 									{ onSubmit: this.onFormSubmit },
-									React.createElement("input", { type: "text", name: "location", ref: "location", placeholder: "Enter any location" }),
+									React.createElement("input", { type: "search", name: "location", ref: "location", placeholder: "Search weather by city" }),
 									React.createElement(
 											"button",
 											{ className: "button expanded hollow" },
@@ -25787,8 +25831,9 @@
 				} else {
 					return response.data.main.temp;
 				}
-			}, function (response) {
-				throw new Error(response.data.message);
+			}, function (error) {
+				//throw new Error(response.data.message);
+				throw new Error("Unable to fetch weather for that location.");
 			});
 		}
 	};
@@ -27278,6 +27323,65 @@
 /* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function($) {"use strict";
+
+	var React = __webpack_require__(8);
+
+	var ErrorModal = React.createClass({
+		displayName: "ErrorModal",
+
+		getDefaultProps: function getDefaultProps() {
+			return {
+				title: "There was an Error"
+			};
+		},
+		propTypes: {
+			title: React.PropTypes.string,
+			message: React.PropTypes.string.isRequired
+		},
+		componentDidMount: function componentDidMount() {
+			var modal = new Foundation.Reveal($('#error-modal'));
+			modal.open();
+		},
+		render: function render() {
+			var _props = this.props,
+			    title = _props.title,
+			    message = _props.message;
+
+
+			return React.createElement(
+				"div",
+				{ id: "error-modal", className: "reveal tiny text-center", "data-reveal": "" },
+				React.createElement(
+					"h4",
+					null,
+					title
+				),
+				React.createElement(
+					"p",
+					null,
+					message
+				),
+				React.createElement(
+					"p",
+					null,
+					React.createElement(
+						"button",
+						{ className: "button hollow", "data-close": "" },
+						"Okay"
+					)
+				)
+			);
+		}
+	});
+
+	module.exports = ErrorModal;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	var React = __webpack_require__(8);
@@ -27290,7 +27394,7 @@
 	        null,
 	        React.createElement(
 	            "h1",
-	            { className: "text-center" },
+	            { className: "text-center page-title" },
 	            "About Component"
 	        ),
 	        React.createElement(
@@ -27333,7 +27437,7 @@
 	module.exports = About;
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27349,7 +27453,7 @@
 			null,
 			React.createElement(
 				"h1",
-				{ className: "text-center" },
+				{ className: "text-center page-title" },
 				"Examples"
 			),
 			React.createElement(
@@ -27385,16 +27489,16 @@
 	module.exports = Examples;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(263);
+	var content = __webpack_require__(264);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(265)(content, {});
+	var update = __webpack_require__(266)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -27411,10 +27515,10 @@
 	}
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(264)();
+	exports = module.exports = __webpack_require__(265)();
 	// imports
 
 
@@ -27425,7 +27529,7 @@
 
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports) {
 
 	/*
@@ -27481,7 +27585,7 @@
 
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27732,6 +27836,46 @@
 		if(oldSrc)
 			URL.revokeObjectURL(oldSrc);
 	}
+
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(268);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(266)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./app.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./app.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(265)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".page-title{\n\tmargin-top: 10%;\n\tmargin-bottom: 1%;\n}\n\ninput[type=search]{\n\tbox-shadow: none;\n}", ""]);
+
+	// exports
 
 
 /***/ }
