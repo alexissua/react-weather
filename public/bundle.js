@@ -110,8 +110,8 @@
 	var Main = __webpack_require__(229);
 	var Nav = __webpack_require__(230);
 	var Weather = __webpack_require__(231);
-	var About = __webpack_require__(261);
-	var Examples = __webpack_require__(262);
+	var About = __webpack_require__(262);
+	var Examples = __webpack_require__(263);
 
 	// var obj = {
 	//   name: "Andrew"
@@ -120,11 +120,11 @@
 	// var {name} = obj;
 
 	// Load Foundation
-	__webpack_require__(263);
+	__webpack_require__(264);
 	$(document).foundation();
 
 	// Load CSS File::
-	__webpack_require__(267);
+	__webpack_require__(268);
 
 	ReactDOM.render(React.createElement(
 	    Router,
@@ -27327,7 +27327,7 @@
 
 	var React = __webpack_require__(8);
 	var ReactDOM = __webpack_require__(165);
-	var ReactDOMServer = __webpack_require__(269);
+	var ReactDOMServer = __webpack_require__(261);
 
 	var ErrorModal = React.createClass({
 		displayName: "ErrorModal",
@@ -27390,6 +27390,15 @@
 /* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	module.exports = __webpack_require__(155);
+
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	var React = __webpack_require__(8);
@@ -27445,7 +27454,7 @@
 	module.exports = About;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27497,16 +27506,16 @@
 	module.exports = Examples;
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(264);
+	var content = __webpack_require__(265);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(266)(content, {});
+	var update = __webpack_require__(267)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -27523,10 +27532,10 @@
 	}
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(265)();
+	exports = module.exports = __webpack_require__(266)();
 	// imports
 
 
@@ -27537,7 +27546,7 @@
 
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports) {
 
 	/*
@@ -27593,7 +27602,7 @@
 
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -27847,23 +27856,23 @@
 
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(268);
+	var content = __webpack_require__(269);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(266)(content, {});
+	var update = __webpack_require__(267)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./app.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./app.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./app.scss", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/sass-loader/index.js!./app.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -27873,26 +27882,17 @@
 	}
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(265)();
+	exports = module.exports = __webpack_require__(266)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".page-title{\n\tmargin-top: 10%;\n\tmargin-bottom: 1%;\n}\n\ninput[type=search]{\n\tbox-shadow: none;\n}", ""]);
+	exports.push([module.id, "/* $title-color: purple; */\n.page-title {\n  color: #555;\n  margin-top: 10%;\n  margin-bottom: 1%; }\n\ninput[type=search] {\n  box-shadow: none; }\n", ""]);
 
 	// exports
-
-
-/***/ },
-/* 269 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(155);
 
 
 /***/ }
